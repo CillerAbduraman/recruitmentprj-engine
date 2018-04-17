@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:body>
+
+    <ui:composition template="template/common/commonLayout.xhtml">
+        <ui:define name="content">
+            <p:dataTable id="candidatesTable"
+                         var="candidate"
+                         value="#{candidateView.candidates}"
+                         selectionMode="single"
+                         selection="#{candidateView.selectedCandidate}" rowKey="#{candidate.id}">
+                <f:facet name="header">
+                    Candidates
+                </f:facet>
+                <p:column headerText="Id">
+                    <h:outputText value="#{candidate.id}"/>
+                </p:column>
+                <p:column headerText="First Name">
+                    <h:outputText value="#{candidate.firstName}"/>
+                </p:column>
+                <p:column headerText="Last Name">
+                    <h:outputText value="#{candidate.lastName}"/>
+                </p:column>
+
+                <p:column headerText="Gender">
+                    <h:outputText value="#{candidate.gender}"/>
+                </p:column>
+
+                <p:column headerText="Birth Date">
+                    <h:outputText value="#{candidate.birthDate}"/>
+                </p:column>
+
+                <p:column headerText="Phone">
+                    <h:outputText value="#{candidate.contact.phone}"/>
+                </p:column>
+
+                <p:column headerText="Email">
+                    <h:outputText value="#{candidate.contact.email}"/>
+                </p:column>
+
+                <p:column headerText="Address">
+                    <h:outputText value="#{candidate.contact.address}"/>
+                </p:column>
+
+                <p:column headerText="City">
+                    <h:outputText value="#{candidate.contact.city}"/>
+                </p:column>
+
+                <p:column headerText="Country">
+                    <h:outputText value="#{candidate.contact.country}"/>
+                </p:column>
+
+                <p:column headerText="Experience level">
+                    <h:outputText value="#{candidate.experienceLevel}"/>
+                </p:column>
+
+                <p:column headerText="Most recent employer">
+                    <h:outputText value="#{candidate.mostRecentEmployer}"/>
+                </p:column>
+
+                <p:column headerText="Most recent job title">
+                    <h:outputText value="#{candidate.mostRecentJobTitle}"/>
+                </p:column>
+
+                <p:column headerText="Education">
+                    <h:outputText value="#{candidate.experienceLevel}"/>
+                </p:column>
+
+                <p:column headerText="Salary Preference">
+                    <h:outputText value="#{candidate.salaryPreference}"/>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton process="candidatesTable"
+                                     update=":form:editCandidate" icon="fa-edit fa fa-fw"
+                                     value="Edit"/>
+                    <p:commandButton process="candidatesTable"
+                                     actionListener="#{candidateView.deleteCandidate}"
+                                     update=":form:candidatesTable,:form:growl" icon="fa-trash fa fa-fw"
+                                     value="Delete"/>
+                </f:facet>
+            </p:dataTable>
+            <p:separator style="margin:30px"/>
+            <p:panel id="editCandidate"
+                     header="#{empty candidateView.selectedCandidate.id ? 'New Candidate' : 'Update Candidate'}">
+
+
+                <h:panelGrid columns="2" cellpadding="10">
+                    <h:outputText value="First Name:*"/>
+                    <p:inputText id="first-name" value="#{candidateView.selectedCandidate.firstName}"
+                                 required="true"
+                                 requiredMessage="First Name is Mandatory!"/>
+
+                    <h:outputText value="Last Name:*"/>
+                    <p:inputText id="last-name" value="#{candidateView.selectedCandidate.lastName}"
+                                 required="true"
+                                 requiredMessage="Last Name is Mandatory!"/>
+
+                    <h:outputText value="Birth Date:" />
+                    <p:calendar id="birthDate" value="#{candidateView.selectedCandidate.birthDate}" showOn="button" />
+
+                    <h:outputText value="Gender:" />
+                    <p:selectOneRadio id="gender" value="#{candidateView.selectedCandidate.gender}">
+                        <f:selectItem itemLabel="Female" itemValue="FEMALE" />
+                        <f:selectItem itemLabel="Male" itemValue="MALE" />
+                    </p:selectOneRadio>
+
+                    <h:outputText value="Phone:"/>
+                    <p:inputText id="phone" value="#{candidateView.selectedCandidate.contact.phone}"
+                                 required="true"
+                                 requiredMessage="Phone is Mandatory!"/>
+
+                    <h:outputText value="Email:"/>
+                    <p:inputText id="email" value="#{candidateView.selectedCandidate.contact.email}"
+                                 required="true"
+                                 requiredMessage="Email is Mandatory!"/>
+
+                    <h:outputText value="Address:"/>
+                    <p:inputText id="address" value="#{candidateView.selectedCandidate.contact.address}"/>
+
+                    <h:outputText value="City:"/>
+                    <p:inputText id="city" value="#{candidateView.selectedCandidate.contact.city}"
+                                 required="true"
+                                 requiredMessage="City is Mandatory!"/>
+
+                   <h:outputText value="Country:"/>
+                   <p:inputText id="country" value="#{candidateView.selectedCandidate.contact.country}"/>
+
+                    <p:outputLabel value="Experience level: " />
+                    <p:selectOneMenu id="experience" value="#{dropdownView.experience}" >
+                        <p:ajax listener="#{dropdownView.onExperienceChange}"  />
+                       <f:selectItem itemLabel="Select Experience Level"  noSelectionOption="true" />
+                        <f:selectItems value="#{dropdownView.experiences}" />
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Most recent employer:"/>
+                    <p:inputText id="employer" value="#{candidateView.selectedCandidate.mostRecentEmployer}"/>
+
+                    <h:outputText value="Most recent job title:"/>
+                    <p:inputText id="jobTitle" value="#{candidateView.selectedCandidate.mostRecentJobTitle}"/>
+
+                    <h:outputText value="Education:"/>
+                    <p:inputText id="education" value="#{candidateView.selectedCandidate.education}"/>
+
+                    <h:outputText value="Salary preference:"/>
+                    <p:inputText  id="salary" value="#{candidateView.selectedCandidate.salaryPreference}"/>
+                    <p:watermark for="salary" value="Currency - LEI" />
+
+                </h:panelGrid>
+
+                <p:commandButton id="submit" value="Save" update=":form:candidatesTable,:form:growl,editCandidate"
+                                 icon="fa-save fa fa-fw"
+                                 partialSubmit="true"
+                                 process=":form:editCandidate"
+                                 actionListener="#{candidateView.saveCandidate}">
+                </p:commandButton>
+                <p:commandButton value="Reset" update="editCandidate" process="@this" style="margin-left:20px;">
+                    <p:resetInput target="editCandidate"/>
+                </p:commandButton>
+                <p:commandButton value="New Candidate" update="editCandidate" process="@this" rendered="#{not empty candidateView.selectedCandidate.id}"
+                                 actionListener="#{candidateView.newCandidate}" style="margin-left:20px;">
+                    <p:resetInput target="editCandidate"/>
+                </p:commandButton>
+
+            </p:panel>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>
